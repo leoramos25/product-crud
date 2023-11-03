@@ -68,7 +68,7 @@ public class AuthController : ControllerBase
         return Problem("Usuário ou senha incorretos.");
     }
 
-    private async Task<string> GerarJwt(string email)
+    private async Task<AccessToken> GerarJwt(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
         var roles = await _userManager.GetRolesAsync(user);
@@ -97,6 +97,9 @@ public class AuthController : ControllerBase
 
         var encodedToken = tokenHandler.WriteToken(token);
 
-        return encodedToken;
+        return new AccessToken
+        {
+            Token = encodedToken,
+        };
     }
 }
